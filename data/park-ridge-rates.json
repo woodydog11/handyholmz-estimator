@@ -1,0 +1,145 @@
+{
+  "asOf": "2026-11-12",
+  "notice": "Published advertised prices and Chicago-area guides; not live quotes or verified transactions.",
+  "sources": [
+    {
+      "id": "northforge",
+      "name": "Northforge Home Services",
+      "kind": "local advertised",
+      "url": "https://www.northforgehome.com/index",
+      "location": "Harwood Heights; serves Park Ridge",
+      "checked": "2026-11-12"
+    },
+    {
+      "id": "steve",
+      "name": "Steve's Home Improvement",
+      "kind": "local advertised",
+      "url": "https://www.craigslist.org/view/d/steves-home-improvement-handyman/8MMJ9UELk5S2mLC17khVCV",
+      "location": "Park Ridge",
+      "checked": "2026-11-12"
+    },
+    {
+      "id": "angi",
+      "name": "Angi Chicago 2026",
+      "kind": "regional guide",
+      "url": "https://www.angi.com/articles/what-are-common-handyman-prices/il/chicago",
+      "location": "Chicago metro",
+      "checked": "2026-11-12"
+    },
+    {
+      "id": "promatcher",
+      "name": "ProMatcher Chicago",
+      "kind": "regional reported",
+      "url": "https://handyman.promatcher.com/cost/chicago-il-handyman-costs-prices.aspx",
+      "location": "Chicago metro",
+      "checked": "2026-11-12"
+    }
+  ],
+  "hourly": [
+    {
+      "source": "northforge",
+      "firstHour": 120,
+      "additionalHour": 65,
+      "minimum": 120,
+      "note": "First hour includes trip"
+    },
+    {
+      "source": "steve",
+      "hourly": 40,
+      "minimum": 85,
+      "day": 320,
+      "note": "Advertised independent operator"
+    },
+    {
+      "source": "promatcher",
+      "low": 67.64,
+      "high": 79.38,
+      "note": "Chicago residential handyman aggregate; plus parts/materials"
+    }
+  ],
+  "tasks": {
+    "fan": [
+      {
+        "source": "angi",
+        "low": 105,
+        "high": 415,
+        "unit": "per installation",
+        "note": "Chicago-area guide"
+      }
+    ],
+    "drywall": [
+      {
+        "source": "angi",
+        "low": 125,
+        "high": 365,
+        "unit": "per patch",
+        "note": "Scope/size varies"
+      }
+    ],
+    "faucet": [
+      {
+        "source": "angi",
+        "low": 105,
+        "high": 315,
+        "unit": "per replacement",
+        "note": "Confirm fixture and plumbing scope"
+      }
+    ],
+    "shelf": [
+      {
+        "source": "angi",
+        "low": 160,
+        "high": 520,
+        "unit": "per hanging-shelves job",
+        "note": "Not per shelf; do not multiply by quantity without scope match"
+      }
+    ],
+    "door": [
+      {
+        "source": "angi",
+        "low": 80,
+        "high": 230,
+        "unit": "door adjustment/repair",
+        "note": "NOT comparable to new door installation"
+      }
+    ],
+    "paint": [
+      {
+        "source": "angi",
+        "low": 210,
+        "high": 1660,
+        "unit": "per room",
+        "note": "Room size and prep vary"
+      }
+    ],
+    "misc": []
+  },
+  "fixed": [
+    {
+      "source": "northforge",
+      "task": "TV wall mount",
+      "price": 150,
+      "unit": "one TV, customer supplies mount and TV"
+    },
+    {
+      "source": "northforge",
+      "task": "Mirror mounting",
+      "price": 95,
+      "unit": "single mirror up to 36x48"
+    },
+    {
+      "source": "northforge",
+      "task": "Gutter cleaning",
+      "low": 150,
+      "high": 250,
+      "unit": "single-story"
+    },
+    {
+      "source": "northforge",
+      "task": "Gutter cleaning",
+      "low": 250,
+      "high": 400,
+      "unit": "two-story"
+    }
+  ]
+}
