@@ -79,9 +79,55 @@
  .panel .stat{padding:9px}
  .rates-wrap{overflow-x:auto}
 }
+
+/* Professional handyman identity and editorial workspace styling */
+:root{font-family:Inter,Arial,sans-serif;color:#17273b;background:#edf2f7}
+body{background:#edf2f7}
+header{background:#10243a;color:#fff;border-bottom:3px solid #d3a64b}
+.brand-wrap{display:flex;align-items:center;gap:12px}.brand-icon{display:grid;place-items:center;width:43px;height:43px;border:2px solid #d9b56c;border-radius:11px;color:#e6bc66;font-size:31px;font-weight:800}
+.brand{font-size:24px;letter-spacing:-.6px}.brand em{font-style:normal;color:#e6bc66}
+header .muted{color:#c7d4e3}.pill{border-color:#aa8b53;color:#f3d79c}
+.hero{height:126px;background:linear-gradient(90deg,rgba(9,30,51,.97) 0%,rgba(9,30,51,.87) 43%,rgba(9,30,51,.25) 100%),url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1600&q=80') center 45%/cover;display:flex;align-items:center;padding:20px 28px;color:#fff}
+.hero h1{font-size:24px;line-height:1.15;margin:5px 0 5px;letter-spacing:-.5px}.hero p{font-size:12px;margin:0;color:#e3eaf2}.eyebrow{font-size:10px;letter-spacing:1.8px;font-weight:750;color:#f0ca7c}
+.operator-bar{background:#fff;border-bottom:1px solid #d8e0e9;color:#17273b}
+.operator-main .muted{color:#52667b}.operator-main button{background:#e9eff6;color:#193c60}
+.operator-main #rate-ask{background:#183f68;color:#fff}
+.operator-settings{background:#fff}.operator-settings label{color:#334c66}.operator-settings input{background:#f6f9fc;color:#17273b}
+.layout{height:calc(100dvh - 260px);background:#f6f8fb}
+.chat{background:#fff;border-right:1px solid #dce4ed}
+.chat-title{display:flex;align-items:center;gap:10px;padding:13px 20px;border-bottom:1px solid #e3e9ef;color:#183755}
+.chat-title-icon{width:31px;height:31px;background:#163e66;color:#f4d18b;border-radius:9px;display:grid;place-items:center}
+.chat-title strong{display:block;font-size:15px}.chat-title small{display:block;font-size:11px;color:#687e91;margin-top:3px}
+.messages{background:#fff}.bubble.ai{background:#edf3f9;color:#23384d}.bubble.user{background:#1f5688;color:#fff}
+.composer{background:#fff;border-color:#dfe7ef}.composer textarea{background:#f5f8fc;border-color:#cbd8e5;color:#182e46}.composer button{background:#1d558a}
+.examples button{background:#e8f0f8;color:#204c75;border:1px solid #d3e2f0}
+.panel{background:#f7f9fc;color:#1b3047}.panel .line{background:#fff;border-color:#dce5ef;color:#1b3047}
+.panel .muted{color:#61778e}.panel .row{color:#1b3047}.panel .stat{background:#e9f0f7}.panel .warning{background:#fff5e4;color:#775016}
+.panel .money{color:#123f6a}.panel .rate-note{color:#62778d}.panel .rates-table th,.panel .rates-table td{border-color:#dfe6ed}.panel a{color:#145c9c!important}
+.service-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:8px 14px 12px;background:#fff}
+.service-tile{min-height:62px;position:relative;overflow:hidden;text-align:left;padding:8px 10px;display:flex;align-items:end;border-radius:9px;border:1px solid #cad7e5;background-size:cover;background-position:center;box-shadow:inset 0 -40px 32px -10px #071e35bd}
+.service-tile span{color:#fff;font-size:12px;text-shadow:0 1px 3px #000a}
+.service-tile.fan{background-image:linear-gradient(0deg,#0b2639bb,#0b263944),url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=480&q=75')}
+.service-tile.door{background-image:linear-gradient(0deg,#0b2639bb,#0b263944),url('https://images.unsplash.com/photo-1530124566582-a618bc2615dc?auto=format&fit=crop&w=480&q=75')}
+.service-tile.paint{background-image:linear-gradient(0deg,#0b2639bb,#0b263944),url('https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=480&q=75')}
+@media(max-width:800px){
+ header{height:46px;min-height:46px;flex-basis:46px}
+ .brand-icon{width:28px;height:28px;font-size:21px;border-radius:7px}.brand{font-size:17px}
+ .hero{display:none}
+ .layout{height:auto;background:#fff}
+ .chat-title{padding:8px 12px}.chat-title strong{font-size:13px}.chat-title small{font-size:10px}
+ .operator-bar{background:#fff}
+ .operator-settings{background:#fff}
+ .operator-main #rate-ask{display:none}
+ .service-strip{display:none}
+ .panel{background:#f7f9fc}
+ .panel.mobile-open{display:block}
+ .panel.collapsed{display:none}
+ #mobile-estimate{background:#1b446b}
+}
 </style></head><body>
-<header><div><div class="brand">🔧 Handy Holmz</div><div class="muted">Conversational Project Estimator · Park Ridge, IL</div></div><span class="pill">PREVIEW · SAMPLE RATES</span></header>
-<div class="operator-bar"><div class="operator-main"><strong>Michael's pricing</strong><span id="rate-summary" class="muted">$85/hr · benchmark pending</span><button class="secondary" id="settings-toggle" type="button" aria-expanded="false" aria-controls="operator-settings">⚙ Adjust rates</button><button class="secondary" id="rate-ask" type="button">Is my rate competitive?</button></div><div id="operator-settings" class="operator-settings hidden"><label>Hourly billing rate ($)<input id="hourly" type="number" min="0" value="85"></label><label>Internal labor allowance ($/hr)<input id="labor" type="number" min="0" value="35"></label><label>Overhead per visit ($)<input id="overhead" type="number" min="0" value="35"></label><label>Job materials allowance ($)<input id="materials" type="number" min="0" value="0"></label><div class="muted">Hourly rate, labor allowance and overhead are saved in this browser. Materials are specific to the current job. Published competitor rates are not verified transactions.</div></div></div><div class="layout"><section class="chat"><div class="messages" id="messages" aria-live="polite"></div><div class="examples" id="examples"><button data-example="Install three ceiling fans">Three ceiling fans</button><button data-example="Replace two interior doors and patch drywall">Doors + drywall</button><button data-example="Replace a faucet and install two shelves">Faucet + shelves</button></div><form class="composer" id="form"><textarea id="prompt" aria-label="Describe the job" placeholder="Describe the job or ask to change a price…"></textarea><button type="submit">Send ↑</button></form><button id="mobile-estimate" type="button" aria-controls="panel" aria-expanded="false"><span>Estimate <strong id="mobile-total">$35</strong></span><span>View details ↑</span></button></section>
+<header><div class="brand-wrap"><div class="brand-icon">⌂</div><div><div class="brand">Handy <em>Holmz</em></div><div class="muted">Professional Home Services · Park Ridge, IL</div></div></div><span class="pill">ESTIMATOR BETA</span></header><div class="hero"><div class="hero-copy"><span class="eyebrow">HANDY HOLMZ · ESTIMATING WORKSPACE</span><h1>Every job deserves a professional estimate.</h1><p>Describe the work. Compare local pricing. Build a quote with confidence.</p></div></div>
+<div class="operator-bar"><div class="operator-main"><strong>Michael's pricing</strong><span id="rate-summary" class="muted">$85/hr · benchmark pending</span><button class="secondary" id="settings-toggle" type="button" aria-expanded="false" aria-controls="operator-settings">⚙ Adjust rates</button><button class="secondary" id="rate-ask" type="button">Is my rate competitive?</button></div><div id="operator-settings" class="operator-settings hidden"><label>Hourly billing rate ($)<input id="hourly" type="number" min="0" value="85"></label><label>Internal labor allowance ($/hr)<input id="labor" type="number" min="0" value="35"></label><label>Overhead per visit ($)<input id="overhead" type="number" min="0" value="35"></label><label>Job materials allowance ($)<input id="materials" type="number" min="0" value="0"></label><div class="muted">Hourly rate, labor allowance and overhead are saved in this browser. Materials are specific to the current job. Published competitor rates are not verified transactions.</div></div></div><div class="layout"><section class="chat"><div class="chat-title"><span class="chat-title-icon">✦</span><div><strong>AI Project Estimator</strong><small>Tell me about the job and we’ll build the numbers together.</small></div></div><div class="messages" id="messages" aria-live="polite"></div><div class="examples" id="examples"><button data-example="Install three ceiling fans">Three ceiling fans</button><button data-example="Replace two interior doors and patch drywall">Doors + drywall</button><button data-example="Replace a faucet and install two shelves">Faucet + shelves</button></div><form class="composer" id="form"><textarea id="prompt" aria-label="Describe the job" placeholder="Describe the job or ask to change a price…"></textarea><button type="submit">Send ↑</button></form><div class="service-strip" aria-label="Common handyman jobs"><button type="button" data-example="Install two ceiling fans" class="service-tile fan"><span>Ceiling fans</span></button><button type="button" data-example="Replace an interior door" class="service-tile door"><span>Doors & trim</span></button><button type="button" data-example="Patch drywall and paint a room" class="service-tile paint"><span>Repairs & painting</span></button></div><button id="mobile-estimate" type="button" aria-controls="panel" aria-expanded="false"><span>Estimate <strong id="mobile-total">$35</strong></span><span>View details ↑</span></button></section>
 <aside class="panel" id="panel"><div class="row estimate-head"><strong>Live Estimate <span id="estimate-mini" class="muted"></span></strong><button class="secondary" id="toggle" type="button" aria-expanded="true">Collapse</button></div><div class="muted" id="status">Draft · Park Ridge, IL</div><div id="lines"></div><div id="totals"></div><div class="line" id="market-panel"><strong>Park Ridge market comparison</strong><div class="muted" id="market-content">Loading sourced published prices…</div></div><details id="rate-library" class="line"><summary style="cursor:pointer;font-weight:700">View full competitor pricing table</summary><div class="rates-toolbar" style="margin-top:12px"><label for="rate-filter" class="muted">Category</label><select id="rate-filter"><option value="all">All categories</option><option value="hourly">Hourly rates</option><option value="fixed">Fixed job examples</option><option value="tasks">Job benchmarks</option></select></div><div class="rates-wrap"><table class="rates-table"><thead><tr><th>Service</th><th>Published price</th><th>Source</th><th>Basis / notes</th></tr></thead><tbody id="rates-body"><tr><td colspan="4">Loading rate library…</td></tr></tbody></table></div><div class="rate-note" id="rates-caption" style="margin-top:10px"></div></details><div class="warning">Published competitor prices and regional guides are not live quotes. Confirm scope, licensing, permits and site conditions. Task prices remain editable operator assumptions.</div><button id="copy" type="button" style="margin-top:15px;width:100%">Copy Customer Estimate</button><div class="muted" style="margin-top:10px">Operator approval required before sending. No jobs are saved to a server.</div></aside></div>
 <script>
 window.addEventListener('error',function(event){
