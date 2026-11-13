@@ -5,7 +5,7 @@
 </style></head><body>
 <header><div><div class="brand">🔧 Handy Holmz</div><div class="muted">Conversational Project Estimator · Park Ridge, IL</div></div><span class="pill">PREVIEW · SAMPLE RATES</span></header>
 <div class="layout"><section class="chat"><div class="messages" id="messages" aria-live="polite"></div><div class="examples" id="examples"><button data-example="Install three ceiling fans">Three ceiling fans</button><button data-example="Replace two interior doors and patch drywall">Doors + drywall</button><button data-example="Replace a faucet and install two shelves">Faucet + shelves</button></div><form class="composer" id="form"><textarea id="prompt" aria-label="Describe the job" placeholder="Describe the job or ask to change a price…"></textarea><button type="submit">Send ↑</button></form></section>
-<aside class="panel" id="panel"><div class="row"><strong>Live Estimate</strong><button class="secondary" id="toggle" type="button">Collapse / Expand</button></div><div class="muted" id="status">Draft · Park Ridge, IL</div><div id="lines"></div><div id="totals"></div><div class="warning">Market comparisons are not connected. All task prices are editable demonstration assumptions, not verified local competitor quotes. Check licensing, permits and site conditions before quoting regulated work.</div><div class="settings"><details><summary>Operator pricing settings</summary><label>Hourly billing rate ($)<input id="hourly" type="number" min="0" value="85"></label><label>Internal labor allowance ($/hr)<input id="labor" type="number" min="0" value="35"></label><label>Materials allowance ($)<input id="materials" type="number" min="0" value="0"></label><label>Overhead per visit ($)<input id="overhead" type="number" min="0" value="35"></label></details></div><button id="copy" type="button" style="margin-top:15px;width:100%">Copy Customer Estimate</button><div class="muted" style="margin-top:10px">Operator approval required before sending. No jobs are saved to a server.</div></aside></div>
+<aside class="panel" id="panel"><div class="row"><strong>Live Estimate</strong><button class="secondary" id="toggle" type="button">Collapse / Expand</button></div><div class="muted" id="status">Draft · Park Ridge, IL</div><div id="lines"></div><div id="totals"></div><div class="line" id="market-panel"><strong>Park Ridge market comparison</strong><div class="muted" id="market-content">Loading sourced published prices…</div></div><div class="warning">Published competitor prices and regional guides are not live quotes. Confirm scope, licensing, permits and site conditions. Task prices remain editable operator assumptions.</div><div class="settings"><details><summary>Operator pricing settings</summary><label>Hourly billing rate ($)<input id="hourly" type="number" min="0" value="85"></label><label>Internal labor allowance ($/hr)<input id="labor" type="number" min="0" value="35"></label><label>Materials allowance ($)<input id="materials" type="number" min="0" value="0"></label><label>Overhead per visit ($)<input id="overhead" type="number" min="0" value="35"></label></details></div><button id="copy" type="button" style="margin-top:15px;width:100%">Copy Customer Estimate</button><div class="muted" style="margin-top:10px">Operator approval required before sending. No jobs are saved to a server.</div></aside></div>
 <script>
 window.addEventListener('error',function(event){
  const box=document.getElementById('messages');
@@ -22,7 +22,36 @@ function price(l){return l.qty*(l.mode==='fixed'?l.price:l.hours*num('hourly'))}
 function render(){const box=$('lines');box.replaceChildren();for(const l of lines){const d=document.createElement('div');d.className='line';const top=document.createElement('div');top.className='linehead';const name=document.createElement('strong');name.textContent=l.qty+' × '+l.name;const amount=document.createElement('strong');amount.textContent=cash(price(l));top.append(name,amount);const small=document.createElement('div');small.className='muted';small.textContent=(l.hours*l.qty)+' estimated labor hours';const sel=document.createElement('select');for(const mode of ['fixed','hourly']){const opt=document.createElement('option');opt.value=mode;opt.textContent=mode==='fixed'?'Fixed price':'Hourly';sel.append(opt)}sel.value=l.mode;sel.onchange=()=>{l.mode=sel.value;approved=false;render()};d.append(top,small,sel);box.append(d)}if(!lines.length){const d=document.createElement('div');d.className='empty';d.textContent='Describe a job in the chat to build your estimate.';box.append(d)}
 const task=lines.reduce((s,l)=>s+price(l),0),total=task+num('materials')+num('overhead'),hours=lines.reduce((s,l)=>s+l.qty*l.hours,0),cost=hours*num('labor')+num('materials')+num('overhead'),profit=total-cost,margin=total?profit/total*100:0;
 $('totals').innerHTML='<div class="muted">CUSTOMER ESTIMATE</div><div class="money">'+cash(total)+'</div><div class="row"><span>Task charges</span><strong>'+cash(task)+'</strong></div><div class="row"><span>Materials allowance</span><strong>'+cash(num('materials'))+'</strong></div><div class="row"><span>Overhead allowance</span><strong>'+cash(num('overhead'))+'</strong></div><div class="grid"><div class="stat"><span class="muted">Est. cost</span><strong>'+cash(cost)+'</strong></div><div class="stat"><span class="muted">Gross profit</span><strong>'+cash(profit)+'</strong></div><div class="stat"><span class="muted">Margin</span><strong>'+margin.toFixed(1)+'%</strong></div></div>';
-$('status').textContent=(approved?'Ready for operator review':'Draft')+' · '+lines.length+' tasks · Park Ridge, IL'}
+$('status').textContent=(approved?'Ready for operator review':'Draft')+' · '+lines.length+' tasks · Park Ridge, IL';renderMarket()}
+
+let marketData=null;
+const marketSource=id=>marketData?.sources?.find(x=>x.id===id);
+function renderMarket(){
+ const el=$('market-content');if(!el)return;el.replaceChildren();
+ if(!marketData){el.textContent='Market library unavailable; no comparison verified.';return}
+ const intro=document.createElement('div');intro.className='muted';intro.textContent='Published sources checked '+marketData.asOf+' · Not live transaction prices';el.append(intro);
+ for(const l of lines){
+  const entries=marketData.tasks?.[l.id]||[];
+  for(const e of entries){
+   const wrap=document.createElement('div');wrap.style.marginTop='12px';
+   const title=document.createElement('div');title.textContent=l.name+': '+cash(e.low)+'–'+cash(e.high)+' ('+e.unit+')';
+   const link=document.createElement('a');link.href=marketSource(e.source)?.url||'#';link.target='_blank';link.rel='noopener noreferrer';link.textContent=(marketSource(e.source)?.name||'Source')+' · '+(marketSource(e.source)?.kind||'published');link.style.color='#9cc9ff';
+   const note=document.createElement('div');note.className='muted';note.textContent=e.note+'; scope must match before comparing.';
+   wrap.append(title,link,note);el.append(wrap);
+  }
+  if(!entries.length){const none=document.createElement('div');none.className='muted';none.style.marginTop='8px';none.textContent=l.name+': No sufficiently comparable published job price yet.';el.append(none)}
+ }
+ const hourlyTitle=document.createElement('div');hourlyTitle.style.marginTop='14px';hourlyTitle.textContent='Advertised hourly rates:';
+ el.append(hourlyTitle);
+ for(const h of marketData.hourly){
+  const p=document.createElement('div');p.style.marginTop='6px';
+  const a=document.createElement('a');a.href=marketSource(h.source)?.url||'#';a.target='_blank';a.rel='noopener noreferrer';a.style.color='#9cc9ff';a.textContent=marketSource(h.source)?.name||h.source;
+  const detail=document.createElement('span');detail.textContent=' — '+(h.hourly!=null?cash(h.hourly)+'/hr':h.firstHour!=null?cash(h.firstHour)+' first hour; '+cash(h.additionalHour)+'/hr after':cash(h.low)+'–'+cash(h.high)+'/hr')+(h.minimum!=null?' · '+cash(h.minimum)+' minimum':'');
+  p.append(a,detail);el.append(p)
+ }
+}
+fetch('/data/park-ridge-rates.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Rates unavailable');return r.json()}).then(d=>{marketData=d;renderMarket()}).catch(()=>renderMarket());
+
 let busy=false;
 async function respond(text){
  const t=String(text||"").trim();if(!t||busy)return;
