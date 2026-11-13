@@ -5,7 +5,7 @@ export default async (request)=>{
   if(request.method!=="POST")return reply(405,{error:"Method not allowed"});
   const key=Netlify.env.get("OPENAI_API_KEY");
   const access=Netlify.env.get("HANDYHOLMZ_ACCESS_CODE");
-  if(!key || !access)return reply(503,{error:"Server setup incomplete: OPENAI_API_KEY and HANDYHOLMZ_ACCESS_CODE are required."});
+  if(!key || !access){const missing=[!key?"OPENAI_API_KEY":null,!access?"HANDYHOLMZ_ACCESS_CODE":null].filter(Boolean);return reply(503,{error:"Server setup incomplete. Missing Functions environment variable(s): "+missing.join(", ")+". Check this deploy context and redeploy."});}
   if(request.headers.get("x-handyholmz-access")!==access)return reply(401,{error:"Invalid access code."});
   let body;
   try{body=await request.json()}catch{return reply(400,{error:"Invalid JSON"})}
