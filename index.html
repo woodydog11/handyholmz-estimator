@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Handy Holmz | AI Estimator Preview</title>
+<style>
+:root{font-family:Inter,system-ui,-apple-system,sans-serif;color:#eaf0f8;background:#0b1320}*{box-sizing:border-box}body{margin:0}button,input,textarea{font:inherit}button{cursor:pointer}header{display:flex;align-items:center;justify-content:space-between;padding:17px 25px;background:#122136;border-bottom:1px solid #30445e}.brand{font-size:23px;font-weight:800}.muted{color:#a8bad1;font-size:12px}.pill{border:1px solid #46627f;border-radius:30px;padding:6px 11px;font-size:12px}.layout{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(320px,1fr);height:calc(100dvh - 76px)}.chat{display:flex;flex-direction:column;min-height:0;border-right:1px solid #34445b}.messages{overflow:auto;flex:1;padding:24px;display:flex;flex-direction:column;gap:15px}.bubble{max-width:85%;padding:14px 17px;border-radius:17px;line-height:1.55;white-space:pre-wrap}.ai{background:#1c2c42;align-self:flex-start}.user{background:#23538b;align-self:flex-end}.composer{padding:16px;border-top:1px solid #34445b;display:flex;gap:10px}textarea{resize:none;flex:1;background:#192b42;color:white;border:1px solid #45607c;border-radius:13px;padding:13px;min-height:55px}button{background:#2867b5;color:white;border:0;border-radius:10px;padding:11px 15px;font-weight:650}button.secondary{background:#24374e}.examples{padding:0 20px 12px;display:flex;flex-wrap:wrap;gap:7px}.examples button{font-size:12px;background:#22354e}.panel{overflow:auto;padding:23px}.line{background:#17283e;border:1px solid #324a65;padding:13px;border-radius:12px;margin:10px 0}.linehead{display:flex;justify-content:space-between;gap:10px}.line select{background:#263d57;color:white;border:1px solid #56718c;border-radius:7px;padding:6px;margin-top:10px}.money{font-size:36px;font-weight:800;margin:8px 0}.row{display:flex;justify-content:space-between;gap:10px;margin:12px 0}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat{background:#1b2c43;border-radius:10px;padding:12px}.stat strong{display:block;margin-top:5px}.warning{background:#3c3021;padding:11px;border-radius:9px;font-size:12px;color:#f5d5a6;margin-top:12px}.empty{padding:30px;text-align:center;color:#b3c1d3}.settings{border-top:1px solid #34445b;margin-top:20px;padding-top:12px}.settings label{display:flex;justify-content:space-between;align-items:center;margin:10px 0;gap:10px;font-size:13px}.settings input{width:90px;background:#182c43;color:white;border:1px solid #4c6887;border-radius:8px;padding:7px}.hidden{display:none}@media(max-width:800px){header{padding:12px}.brand{font-size:18px}.layout{display:flex;flex-direction:column;height:calc(100dvh - 62px)}.chat{flex:1;min-height:230px}.panel{max-height:42dvh;border-top:1px solid #34445b;padding:12px}.panel.collapsed{max-height:57px;overflow:hidden}.messages{padding:13px}.bubble{max-width:94%}.grid{gap:5px}.stat{padding:7px}.money{font-size:28px}}
+</style></head><body>
+<header><div><div class="brand">🔧 Handy Holmz</div><div class="muted">Conversational Project Estimator · Park Ridge, IL</div></div><span class="pill">PREVIEW · SAMPLE RATES</span></header>
+<div class="layout"><section class="chat"><div class="messages" id="messages" aria-live="polite"></div><div class="examples" id="examples"><button data-example="Install three ceiling fans">Three ceiling fans</button><button data-example="Replace two interior doors and patch drywall">Doors + drywall</button><button data-example="Replace a faucet and install two shelves">Faucet + shelves</button></div><form class="composer" id="form"><textarea id="prompt" aria-label="Describe the job" placeholder="Describe the job or ask to change a price…"></textarea><button type="submit">Send ↑</button></form></section>
+<aside class="panel" id="panel"><div class="row"><strong>Live Estimate</strong><button class="secondary" id="toggle" type="button">Collapse / Expand</button></div><div class="muted" id="status">Draft · Park Ridge, IL</div><div id="lines"></div><div id="totals"></div><div class="warning">Market comparisons are not connected. All task prices are editable demonstration assumptions, not verified local competitor quotes. Check licensing, permits and site conditions before quoting regulated work.</div><div class="settings"><details><summary>Operator pricing settings</summary><label>Hourly billing rate ($)<input id="hourly" type="number" min="0" value="85"></label><label>Internal labor allowance ($/hr)<input id="labor" type="number" min="0" value="35"></label><label>Materials allowance ($)<input id="materials" type="number" min="0" value="0"></label><label>Overhead per visit ($)<input id="overhead" type="number" min="0" value="35"></label></details></div><button id="copy" type="button" style="margin-top:15px;width:100%">Copy Customer Estimate</button><div class="muted" style="margin-top:10px">Operator approval required before sending. No jobs are saved to a server.</div></aside></div>
+<script>
+window.addEventListener('error',function(event){
+ const box=document.getElementById('messages');
+ if(box && !box.dataset.booted){const el=document.createElement('div');el.className='bubble ai';el.textContent='The estimator could not start: '+(event.message||'JavaScript error')+'. Please report this message.';box.append(el)}
+});
+window.addEventListener('unhandledrejection',function(event){console.error('Handy Holmz startup rejection',event.reason)});
+</script>
+<script>
+const catalog=[{id:'fan',name:'Ceiling fan installation',price:195,hours:1.75,pattern:/ceiling fans?/i,qty:'fans?'},{id:'door',name:'Interior door installation',price:275,hours:2.5,pattern:/doors?|doorframe/i,qty:'doors?'},{id:'drywall',name:'Drywall patch',price:175,hours:2,pattern:/drywall|patch(?:ing)? (?:the )?wall/i,qty:'(?:patches|holes)'},{id:'faucet',name:'Faucet replacement',price:165,hours:1.5,pattern:/faucets?/i,qty:'faucets?'},{id:'shelf',name:'Shelf installation',price:95,hours:1,pattern:/shel(?:f|ves)/i,qty:'(?:shelves|shelfs?)'},{id:'paint',name:'Painting',price:340,hours:5,pattern:/paint(?:ing)?/i,qty:'rooms?'}];
+let lines=[];let approved=false;const $=id=>document.getElementById(id);const cash=n=>Number(n).toLocaleString('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0});const num=id=>Math.max(0,Number($(id).value)||0);
+function bubble(text,who='ai'){const e=document.createElement('div');e.className='bubble '+who;e.textContent=text;$('messages').append(e);$('messages').scrollTop=$('messages').scrollHeight}
+function qty(text,pattern){const re=new RegExp('(?:\\b(\\d+)\\b|\\b(one|two|three|four|five|six)\\b)\\s*(?:\\w+\\s+){0,2}'+pattern,'i');const m=text.match(re);return m?Math.min(20,m[1]?Number(m[1]):({one:1,two:2,three:3,four:4,five:5,six:6})[m[2].toLowerCase()]):1}
+function price(l){return l.qty*(l.mode==='fixed'?l.price:l.hours*num('hourly'))}
+function render(){const box=$('lines');box.replaceChildren();for(const l of lines){const d=document.createElement('div');d.className='line';const top=document.createElement('div');top.className='linehead';const name=document.createElement('strong');name.textContent=l.qty+' × '+l.name;const amount=document.createElement('strong');amount.textContent=cash(price(l));top.append(name,amount);const small=document.createElement('div');small.className='muted';small.textContent=(l.hours*l.qty)+' estimated labor hours';const sel=document.createElement('select');for(const mode of ['fixed','hourly']){const opt=document.createElement('option');opt.value=mode;opt.textContent=mode==='fixed'?'Fixed price':'Hourly';sel.append(opt)}sel.value=l.mode;sel.onchange=()=>{l.mode=sel.value;approved=false;render()};d.append(top,small,sel);box.append(d)}if(!lines.length){const d=document.createElement('div');d.className='empty';d.textContent='Describe a job in the chat to build your estimate.';box.append(d)}
+const task=lines.reduce((s,l)=>s+price(l),0),total=task+num('materials')+num('overhead'),hours=lines.reduce((s,l)=>s+l.qty*l.hours,0),cost=hours*num('labor')+num('materials')+num('overhead'),profit=total-cost,margin=total?profit/total*100:0;
+$('totals').innerHTML='<div class="muted">CUSTOMER ESTIMATE</div><div class="money">'+cash(total)+'</div><div class="row"><span>Task charges</span><strong>'+cash(task)+'</strong></div><div class="row"><span>Materials allowance</span><strong>'+cash(num('materials'))+'</strong></div><div class="row"><span>Overhead allowance</span><strong>'+cash(num('overhead'))+'</strong></div><div class="grid"><div class="stat"><span class="muted">Est. cost</span><strong>'+cash(cost)+'</strong></div><div class="stat"><span class="muted">Gross profit</span><strong>'+cash(profit)+'</strong></div><div class="stat"><span class="muted">Margin</span><strong>'+margin.toFixed(1)+'%</strong></div></div>';
+$('status').textContent=(approved?'Ready for operator review':'Draft')+' · '+lines.length+' tasks · Park Ridge, IL'}
+let busy=false;
+async function respond(text){
+ const t=String(text||"").trim();if(!t||busy)return;
+ let access=sessionStorage.getItem("handyholmz-access")||"";
+ if(!access){access=window.prompt("Enter the Handy Holmz operator access code (configured in Netlify):")||"";if(!access)return;sessionStorage.setItem("handyholmz-access",access)}
+ busy=true;
+ const send=$('form').querySelector('button');send.disabled=true;
+ const history=Array.from($('messages').children).slice(-12).map(el=>({role:el.classList.contains('user')?'user':'assistant',content:el.textContent}));
+ const estimate={tasks:lines.map(l=>({id:l.id,quantity:l.qty,mode:l.mode,price:l.price,hours:l.hours})),hourly:num('hourly'),materials:num('materials'),overhead:num('overhead')};
+ bubble(t,'user');$('prompt').value='';$('examples').style.display='none';
+ try{
+ const response=await fetch('/api/chat',{method:'POST',headers:{'content-type':'application/json','x-handyholmz-access':access},body:JSON.stringify({message:t,history,estimate})});
+ const result=await response.json();
+ if(!response.ok){if(response.status===401)sessionStorage.removeItem('handyholmz-access');throw Error(result.error||'AI service error')}
+ for(const a of result.actions||[]){
+  const n=v=>Number.isFinite(Number(v))?Math.max(0,Number(v)):0;
+  if(a.type==='reset'){lines=[];continue}
+  if(a.type==='set_materials'){$('materials').value=n(a.amount);continue}
+  if(a.type==='set_hourly'){$('hourly').value=n(a.amount);continue}
+  if(a.type==='set_overhead'){$('overhead').value=n(a.amount);continue}
+  if(a.type==='remove_task'){lines=lines.filter(l=>l.id!==a.id);continue}
+  if(a.type==='upsert_task'){
+   const base=catalog.find(c=>c.id===a.id);if(!base)continue;
+   const old=lines.find(l=>l.id===a.id);
+   const entry=old||{...base,qty:1,mode:'fixed'};
+   if(a.quantity>0)entry.qty=Math.min(100,n(a.quantity));
+   if(a.mode==='fixed'||a.mode==='hourly')entry.mode=a.mode;
+   if(a.price>0)entry.price=n(a.price);
+   if(a.hours>0)entry.hours=Math.min(1000,n(a.hours));
+   if(!old)lines.push(entry);
+  }
+ }
+ approved=false;render();bubble(result.reply||'Estimate updated.');
+ }catch(err){bubble('Could not reach the AI: '+err.message+' Your existing estimate is unchanged unless the request succeeded.')}
+ finally{busy=false;send.disabled=false}
+}
+$('form').onsubmit=e=>{e.preventDefault();respond($('prompt').value)};document.querySelectorAll('[data-example]').forEach(b=>b.onclick=()=>respond(b.dataset.example));for(const id of ['hourly','labor','materials','overhead'])$(id).oninput=render;$('toggle').onclick=()=>$('panel').classList.toggle('collapsed');$('copy').onclick=async()=>{if(!lines.length)return alert('Add a job first.');const total=lines.reduce((s,l)=>s+price(l),0)+num('materials')+num('overhead');const body='HANDY HOLMZ — PRELIMINARY ESTIMATE\nPark Ridge, IL\n\n'+lines.map(l=>l.qty+' × '+l.name+' ('+l.mode+'): '+cash(price(l))).join('\n')+'\nMaterials: '+cash(num('materials'))+'\nService/overhead allowance: '+cash(num('overhead'))+'\nTOTAL: '+cash(total)+'\n\nSubject to site inspection, scope confirmation and operator approval.';try{await navigator.clipboard.writeText(body);alert('Estimate copied.')}catch{alert('Clipboard unavailable in this browser.')}};bubble('Hey Michael! What are we working on today? Describe the job and I’ll build an estimate as we talk.');render();$('messages').dataset.booted='true';
+</script></body></html>
